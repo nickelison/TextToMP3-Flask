@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row" id="home">
+  <div class="col-md-12 mx-auto">
+    <div class="px-4 pt-1 my-4 text-center">
+      <h1 class="display-4 fw-bold">TextToMP3</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Convert text to audio.</p>
+      </div>
+
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+        <a href="{{ url_for('users.signup') }}" class="custom-btn">Sign Up</a>
+        <a href="{{ url_for('users.login') }}" class="custom-btn cb-secondary">Log In</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

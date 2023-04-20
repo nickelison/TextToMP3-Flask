@@ -1,0 +1,19 @@
+<div class="modal fade" id="rakModal" tabindex="-1" role="dialog" aria-labelledby="rakModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rakModalLabel">Reset API Key</h5>
+      </div>
+
+      <p class="px-3 pt-3">Are you sure you want a new API key?</p>
+
+      <div class="modal-footer">
+        {% import 'macros/reset_api_key_form.html' as f with context %}
+        {% call f.form_tag('users.reset_api_key') %}
+        <button type="submit" class="btn btn-danger">Yes, reset API key</button>
+        {% endcall %}
+        <button type="button" class="btn btn-secondary" id="rakModalClose" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+version: '3.1'
+
+services:
+  aws-ecs-demo:
+    depends_on:
+        - db
+    build:
+      context: .
+      dockerfile: $PWD/Dockerfile
+      args:
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+        - TEST_POSTGRES_USER=${TEST_POSTGRES_USER}
+        - TEST_POSTGRES_PASSWORD=${TEST_POSTGRES_PW}
+        - TEST_POSTGRES_HOST=${TEST_POSTGRES_HOST}
+        - TEST_POSTGRES_DB=${TEST_POSTGRES_DB}
+        - FLASK_SECRET=${FLASK_SECRET}
+        - FLASK_DEBUG=${FLASK_DEBUG}
+    container_name: flask-demo-ecr-repo
+    ports:
+      - 5001:5000
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+    volumes:
+      - ./migrations:/app/migrations
+    # bridge - connect to docker container from localhost
+    # network_mode: bridge
+  db:
+    container_name: db
+    environment:
+      - POSTGRES_USER=${TEST_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${TEST_POSTGRES_PW}
+      - POSTGRES_DB=${TEST_POSTGRES_DB}
+    image: postgres:14
+    networks:
+      - default
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}

@@ -1,0 +1,15 @@
+flask
+gunicorn
+flask-sqlalchemy
+flask-migrate
+psycopg2
+boto3
+python-dotenv
+wtforms
+flask-wtf
+flask-login
+flask-bcrypt
+email-validator
+pillow
+flask-s3
+cryptography

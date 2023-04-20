@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row" id="home">
+  <div class="col-md-12 mx-auto">
+    <div class="px-4 pt-1 my-4 text-center">
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+        <a href="{{ url_for('main.new') }}" class="custom-btn">Create New MP3</a>
+        <a href="{{ url_for('main.files') }}" class="custom-btn cb-secondary">View Your MP3s</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
