@@ -16,7 +16,8 @@ module "aws-ecr" {
 }
 
 module "aws-iam-roles" {
-  source = "./modules/aws-iam-roles"
+  source                 = "./modules/aws-iam-roles"
+  db_creds_secret_id     = "flask-demo-db-creds-3KrmUA"
 }
 
 module "aws-cloudwatch" {
@@ -37,6 +38,7 @@ module "aws-ecs" {
   ecr_repo_url         = module.aws-ecr.ecr_repo_url
   execution_role_arn   = module.aws-iam-roles.task_execution_role_arn
   ecs_log_group_name   = module.aws-cloudwatch.ecs_log_group_name
+  db_creds_secret_id   = "flask-demo-db-creds-3KrmUA"
 }
 
 module "aws-ec2" {
@@ -56,10 +58,11 @@ module "aws-rds" {
 module "aws-route-53" {
   source          = "./modules/aws-route-53"
   domain_name     = "slangz.com"
-  hosted_zone_id  = "Z06138032V7HTVCQSJ7RH"
+  hosted_zone_id  = "Z0352897227JQRN8NTLKX"
   aws_lb_dns_name = module.aws-ecs.aws_lb_dns_name
   aws_lb_zone_id  = module.aws-ecs.aws_lb_zone_id
 }
+
 
 module "aws-s3" {
   source      = "./modules/aws-s3"

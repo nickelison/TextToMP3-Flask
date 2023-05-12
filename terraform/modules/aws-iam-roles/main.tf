@@ -40,7 +40,7 @@ resource "aws_iam_policy" "secrets_manager_access_policy" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Resource = "arn:aws:secretsmanager:us-east-1:431608762876:secret:flask-demo-db-creds-kSUnF3"
+        Resource = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       }
     ]
   })
@@ -126,7 +126,7 @@ resource "aws_iam_policy" "ecs_task_secrets_policy" {
           "secretsmanager:ListSecretVersionIds",
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:flask-demo-db-creds-kSUnF3"
+        Resource = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       }
     ]
   })

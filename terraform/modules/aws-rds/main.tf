@@ -48,18 +48,18 @@ resource "aws_db_instance" "flask_demo_db" {
   backup_retention_period = 7
 }
 
-#resource "aws_db_instance" "flask_demo_db_replica" {
-#  identifier             = "flask-demo-db-replica"
-#  instance_class         = "db.t3.micro"
-#  allocated_storage      = 5
-#  engine                 = "postgres"
-#  engine_version         = "14.1"
-#  vpc_security_group_ids = [aws_security_group.rds_sg.id]
-#  parameter_group_name   = aws_db_parameter_group.flask_demo_db.name
-#  publicly_accessible    = false
-#  skip_final_snapshot    = true
-#  availability_zone      = "us-east-1e"
-#
-#  # Specify the primary RDS instance as the source
-#  replicate_source_db = aws_db_instance.flask_demo_db.id
-#}
+resource "aws_db_instance" "flask_demo_db_replica" {
+  identifier             = "flask-demo-db-replica"
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 5
+  engine                 = "postgres"
+  engine_version         = "14.1"
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  parameter_group_name   = aws_db_parameter_group.flask_demo_db.name
+  publicly_accessible    = false
+  skip_final_snapshot    = true
+  availability_zone      = "us-east-1e"
+
+  # Specify the primary RDS instance as the source
+  replicate_source_db = aws_db_instance.flask_demo_db.id
+}

@@ -1,5 +1,9 @@
-# Create a security group for the ALB.
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+}
 
+# Create a security group for the ALB.
 resource "aws_security_group" "ecs_sg" {
   name        = var.ecs_sg_name
   description = "ECS security group for the ALB."
@@ -230,19 +234,19 @@ resource "aws_ecs_task_definition" "db_upgrade" {
     "secrets" : [
       {
         name      = "POSTGRES_USER"
-        valueFrom = "arn:aws:secretsmanager:us-east-1:431608762876:secret:flask-demo-db-creds-kSUnF3"
+        valueFrom = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       },
       {
         name      = "POSTGRES_HOST"
-        valueFrom = "arn:aws:secretsmanager:us-east-1:431608762876:secret:flask-demo-db-creds-kSUnF3"
+        valueFrom = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       },
       {
         name      = "POSTGRES_DB"
-        valueFrom = "arn:aws:secretsmanager:us-east-1:431608762876:secret:flask-demo-db-creds-kSUnF3"
+        valueFrom = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       },
       {
         name      = "POSTGRES_PW"
-        valueFrom = "arn:aws:secretsmanager:us-east-1:431608762876:secret:flask-demo-db-creds-kSUnF3"
+        valueFrom = "arn:aws:secretsmanager:${local.region}:${local.account_id}:secret:${var.db_creds_secret_id}"
       }
     ]
   }])

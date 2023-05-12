@@ -1,3 +1,8 @@
+variable "db_creds_secret_id" {
+  description = "Secrets Manager secret ID from the secret ARN."
+  type        = string
+}
+
 variable "vpc" {
   description = "ECS Cluster Name"
   type        = string

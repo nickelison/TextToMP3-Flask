@@ -15,6 +15,9 @@ data "aws_iam_policy_document" "ecs_service_role_pd" {
 # Get the AccountId
 data "aws_caller_identity" "current" {}
 
+# Get the AWS region
+data "aws_region" "current" {}
+
 # Create an IAM policy document for assumed roles for EC2.
 data "aws_iam_policy_document" "ec2_role_pd" {
   statement {

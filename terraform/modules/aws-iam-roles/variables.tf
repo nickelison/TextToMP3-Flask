@@ -1,3 +1,8 @@
+variable "db_creds_secret_id" {
+  description = "Secrets Manager secret ID from the secret ARN."
+  type        = string
+}
+
 variable "ecs_task_execution_role_name" {
   description = "Name of the ECS task execution role."
   type        = string
