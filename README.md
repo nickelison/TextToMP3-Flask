@@ -14,7 +14,7 @@ In summary, however:
 
 - A standard three-tier architecture (presentation, application/logic, data) was used.
 - A VPC was created with six subnets between two AZs. NACLs, security groups and route tables are used to control the traffic coming into and out of the network, as well as between subnets within the network. The purpose of resource segregation is for security, and the splitting of resources between AZs is for fault-tolerance.
-- A docker image is pushed to ECR, and the application is then deployed to an ECS service running on two EC2 instances located in different AZs. These EC2 instances are part of an ECS auto scaling group.
+- The Docker image is pushed to ECR, and the application is then deployed to an ECS service running on two EC2 instances located in different AZs. These EC2 instances are part of an ECS auto scaling group.
 - An additional EC2 instance serves as a bastion host, allowing SSH forwarding into otherwise inaccessible EC2 instances.
 - A PostgreSQL RDS database is used along with read-replica situated in a different AZ.
 - A Lambda function is used for converting text to audio with Amazon Polly and storing the resulting audio file in an S3 bucket.
