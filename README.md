@@ -25,14 +25,3 @@ In summary, however:
 <p align="center">
   <img src="https://github.com/nickelison/TextToMP3/blob/main/architecture.png?raw=true" />
 </p>
-
-
-**Screenshots**
-
-<p align="center">
-  <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3-create.png?raw=true" />
-</p>
-
-<p align="center">
-  <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3-list.png?raw=true" />
-</p>
