@@ -3,7 +3,7 @@
 TextToMP3 is a Python (Flask) web application that allows users to convert text to speech using Amazon Polly. It was developed as a semester-length project for 50:198:441 (Distributed & Cloud Computing) at Rutgers–Camden in Spring 2023.
 
 <p align="center">
-  <img src="https://github.com/nickelison/text-to-mp3/blob/main/texttomp3.gif?raw=true" />
+  <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3.gif?raw=true" />
 </p>
 
 The purpose of the project was not to write an application, but to design and implement a highly scalable and secure cloud architecture on which an application could run. As such, most effort was expended on gaining familiarity with AWS — particularly with VPC and the networking aspects of cloud infrastructure — as well as on DevOps tools like Docker and Terraform. The application was containerized using Docker, and Terraform was used to automate the provisioning of almost all the requisite AWS resources. The AWS services used in this project include VPC, ECR, ECS, EC2, RDS, Lambda, S3, Route53, Certificate Manager, Secrets Manager, and CloudWatch.
@@ -23,16 +23,16 @@ In summary, however:
 **AWS Architecture**
 
 <p align="center">
-  <img src="https://github.com/nickelison/text-to-mp3/blob/main/architecture.png?raw=true" />
+  <img src="https://github.com/nickelison/TextToMP3/blob/main/architecture.png?raw=true" />
 </p>
 
 
 **Screenshots**
 
 <p align="center">
-  <img src="https://github.com/nickelison/text-to-mp3/blob/main/texttomp3-create.png?raw=true" />
+  <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3-create.png?raw=true" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/nickelison/text-to-mp3/blob/main/texttomp3-list.png?raw=true" />
+  <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3-list.png?raw=true" />
 </p>
