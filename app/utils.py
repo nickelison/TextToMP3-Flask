@@ -1,17 +1,13 @@
 import json
 import boto3
-import base64
-from botocore.signers import CloudFrontSigner
 from botocore.exceptions import ClientError
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives import serialization
-from datetime import datetime, timedelta
 from flask import current_app
 
 
 def get_secret(secret_name, region_name='us-east-1'):
+    """ Gets a key/value secret from Secrets Manager and returns it as a
+        JSON object.
+    """
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
@@ -31,11 +27,14 @@ def get_secret(secret_name, region_name='us-east-1'):
     # Decrypts secret using the associated KMS key.
     secret = get_secret_value_response['SecretString']
 
-    # Your code goes here.
+    # Return secret object
     return json.loads(secret)
 
 
 def get_plaintext_secret(secret_name, region_name='us-east-1'):
+    """ Get a plaintext secret from Secrets Manager and returns the value as
+        a string.
+    """
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
@@ -55,47 +54,17 @@ def get_plaintext_secret(secret_name, region_name='us-east-1'):
     # Decrypts secret using the associated KMS key.
     secret = get_secret_value_response['SecretString']
 
+    # Return secret value string
     return secret
 
 
-def rsa_signer(message):
-    private_key_str = get_plaintext_secret('cloudfront_private_key', 'us-east-1')
-
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    logging.info(f"private key str: {private_key_str}")
-
-    private_key = serialization.load_pem_private_key(
-        private_key_str.encode(),
-        password=None,
-        backend=default_backend(),
-    )
-
-    signature = private_key.sign(
-        message,
-        padding.PKCS1v15(),
-        hashes.SHA1()
-    )
-
-    return base64.b64encode(signature)
-
-
-def get_presigned_cloudfront_file_url(filename):
-    resource = 'avatars/' + filename
-    cf_domain = "d2tqckyhayhkf8.cloudfront.net"
-    cf_key_pair_id = 'APKAWI7PDCH6C4YGJRM4'
-    cf_url = f'https://{cf_domain}/{resource}'
-
-    cf_signer = CloudFrontSigner(cf_key_pair_id, rsa_signer)
-    expires = datetime.utcnow() + timedelta(seconds=100)
-    url = cf_signer.generate_presigned_url(cf_url, date_less_than=expires)
-
-    return url
-
-
 def get_presigned_s3_file_url(s3_key):
-    # https://stackoverflow.com/questions/52342974/serve-static-files-in-flask-from-private-aws-s3-bucket
-    #resource = 'avatars/' + filename
+    """ Generate a presigned S3 file URL given a key.
+
+        Return the URL as a string.
+
+        See: https://stackoverflow.com/questions/52342974/serve-static-files-in-flask-from-private-aws-s3-bucket
+    """
     s3 = boto3.client('s3',
                       region_name=current_app.config['AWS_REGION'],
                       aws_access_key_id=current_app.config['AWS_ACCESS_KEY_ID'],
@@ -120,6 +89,8 @@ def lambda_client():
 
 
 def delete_from_s3(s3_key):
+    """ Remove an object from an S3 bucket given a key.
+    """
     s3 = boto3.client('s3',
                       region_name=current_app.config['AWS_REGION'],
                       aws_access_key_id=current_app.config['AWS_ACCESS_KEY_ID'],

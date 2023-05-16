@@ -22,7 +22,6 @@ class SignupForm(FlaskForm):
         if user:
             raise ValidationError('That email is taken. Please choose another.')
 
-
 class LoginForm(FlaskForm):
     email = StringField('Username or Email',
                         validators=[DataRequired()])
@@ -30,14 +29,8 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Log In')
 
-
-class DeleteForm(FlaskForm):
+class DeleteAccountForm(FlaskForm):
     delete = SubmitField('Yes, Delete Account')
-
-
-class ResetApiKeyForm(FlaskForm):
-    reset = SubmitField('Yes, Reset API Key')
-
 
 class ResetPasswordForm(FlaskForm):
     old_password = PasswordField('Old Password', validators=[DataRequired()])

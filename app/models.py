@@ -4,32 +4,24 @@ from flask import current_app
 from flask_login import UserMixin
 from utils import delete_from_s3
 from utils import get_presigned_s3_file_url
-from utils import get_presigned_cloudfront_file_url
-
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    api_key = db.Column(db.String(60), nullable=True)
-    api_requests = db.Column(db.BigInteger, default=0, nullable=False)
-    #test_field = db.Column(db.String(20), nullable=False, default="haha")
     profile_picture = db.Column(db.String(40), nullable=False, default="default.jpg")
     mp3_files = db.relationship('MP3File', backref='user', lazy=True)
 
     def get_profile_picture_url(self):
-        # return get_presigned_cloudfront_file_url(self.profile_picture)
         return get_presigned_s3_file_url("avatars/" + self.profile_picture)
 
     def remove(self):
         db.session.delete(self)
-
 
 class MP3File(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,10 +36,3 @@ class MP3File(db.Model, UserMixin):
 
     def delete_from_s3(self):
         delete_from_s3(self.s3_key)
-
-
-class Name(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(64), nullable=False)
-    lname = db.Column(db.String(64), nullable=False)
-    created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

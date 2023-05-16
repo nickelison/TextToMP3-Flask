@@ -2,8 +2,8 @@ import os
 from flask import Blueprint, flash, current_app, render_template, url_for, redirect, request, jsonify
 from main import bp
 from app import db
-from main.forms import NameForm, UploadForm, DeleteMP3Form
-from models import User, Name, MP3File
+from main.forms import UploadForm, DeleteMP3Form
+from models import User, MP3File
 from flask_login import current_user, login_required
 from utils import lambda_client
 import json
@@ -15,41 +15,6 @@ def index():
         return render_template('home.html', title='Convert Text to MP3')
     else:
         return render_template('index.html', title='Convert Text to MP3')
-    # return f"Hello World!!!"
-
-
-@bp.route("/test", methods=['GET', 'POST'])
-def test():
-    form = NameForm()
-
-    if form.validate_on_submit():
-        name = Name(fname=form.fname.data,
-                    lname=form.lname.data)
-
-        db.session.add(name)
-        db.session.commit()
-
-        flash('Name added.', 'success')
-
-        return redirect(url_for('main.test'))
-
-    names = Name.query.all()
-
-    return render_template('test.html', form=form, names=names)
-
-
-@bp.route('/delete/', methods=['POST'])
-def delete():
-    req = request.get_json()
-    name = Name.query.filter_by(id=req['name_id']).first()
-
-    if not name:
-        return {'status': 'error: no name for id'}
-
-    db.session.delete(name)
-    db.session.commit()
-
-    return {'status': 'success'}
 
 
 @bp.route('/new/', methods=['GET', 'POST'])
@@ -68,7 +33,7 @@ def new():
         payload = {'text': text}
         client = lambda_client()
 
-        # call Lambda function
+        # Call Lambda function
         response = client.invoke(FunctionName='arn:aws:lambda:us-east-1:431608762876:function:testFunction',
                                  InvocationType='RequestResponse',
                                  Payload=json.dumps(payload))
@@ -81,7 +46,7 @@ def new():
             filename = response_json['body']['filename']
             s3_key = f'mp3/{filename}'
 
-            # create db entry for mp3 file
+            # Create db entry for mp3 file
             mp3_file = MP3File(user_file_name=user_file_name,
                                file_name=filename,
                                s3_key=s3_key,
@@ -89,13 +54,13 @@ def new():
             db.session.add(mp3_file)
             db.session.commit()
 
-            # redirect to uploads page
+            # Redirect to uploads page
             return redirect(url_for('main.files'))
         else:
-            # error
+            # Error
             pass
 
-        # redirect to uploads page
+        # Redirect to uploads page
         return redirect(url_for('main.index'))
     else:
         return render_template('upload.html', title='Create New MP3', form=form)

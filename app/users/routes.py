@@ -1,9 +1,8 @@
 from app import db, bcrypt
-from models import Name, User
-from users.forms import SignupForm, LoginForm, DeleteForm, ResetApiKeyForm, ResetPasswordForm, ProfilePictureForm
+from models import User
+from users.forms import SignupForm, LoginForm, DeleteAccountForm, ResetPasswordForm, ProfilePictureForm
 from flask import Blueprint, flash, current_app, render_template, url_for, redirect, request, jsonify
 from flask_login import current_user, login_required, login_user, logout_user
-import secrets
 from users.utils import save_profile_picture
 import boto3
 
@@ -15,13 +14,11 @@ def signup():
     form = SignupForm()
 
     if form.validate_on_submit():
-        api_key = secrets.token_urlsafe(43)
 
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data,
                     email=form.email.data,
-                    password=hashed_password,
-                    api_key=api_key)
+                    password=hashed_password)
         db.session.add(user)
         db.session.commit()
         logout_user()
@@ -68,7 +65,6 @@ def logout():
 @users.route('/account/', methods=['GET', 'POST'])
 @login_required
 def account():
-    # form = DeleteForm()
     user = User.query.filter_by(username=current_user.username).first_or_404()
     form = ProfilePictureForm()
 
@@ -87,7 +83,7 @@ def account():
 @users.route('/delete-account/', methods=['POST'])
 @login_required
 def delete_account():
-    form = DeleteForm()
+    form = DeleteAccountForm()
 
     # If form is submitted, delete user. Otherwise, show modal.
     if form.validate_on_submit():
@@ -99,23 +95,6 @@ def delete_account():
         return render_template('users/components/confirm_account_delete_modal.html',
                                username=current_user.username,
                                form=form)
-
-
-@users.route('/reset-api-key', methods=['POST'])
-@login_required
-def reset_api_key():
-    form = ResetApiKeyForm()
-
-    if form.validate_on_submit():
-        current_user.api_key = secrets.token_urlsafe(43)
-        db.session.commit()
-        flash('Your API key has been reset.', 'success')
-        return redirect(url_for('users.account'))
-    else:
-        return render_template('users/components/reset_api_key_modal.html',
-                               username=current_user.username,
-                               form=form)
-
 
 @users.route('/account/reset-password/', methods=['GET', 'POST'])
 @login_required
