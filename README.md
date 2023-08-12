@@ -1,6 +1,6 @@
-# TextToMP3
+# TextToMP3-Flask
 
-TextToMP3 is a Python (Flask) web application that allows users to convert text to speech using Amazon Polly. It was developed as a semester-length project for 50:198:441 (Distributed & Cloud Computing) at Rutgers–Camden in Spring 2023.
+TextToMP3-Flask is a Python (Flask) web application that allows users to convert text to speech using Amazon Polly. It was developed as a semester-length project for 50:198:441 (Distributed & Cloud Computing) at Rutgers–Camden in Spring 2023.
 
 <p align="center">
   <img src="https://github.com/nickelison/TextToMP3/blob/main/texttomp3.gif?raw=true" />
